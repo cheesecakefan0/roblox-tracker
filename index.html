@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roblox Rap & Account Value Tracker</title>
+  <style>
+    :root {
+      --bg1: #0b1020;
+      --bg2: #121a2b;
+      --panel: rgba(18, 26, 43, 0.9);
+      --panel-2: rgba(20, 35, 58, 0.9);
+      --line: rgba(148, 163, 184, 0.25);
+      --text: #e8eefc;
+      --muted: #a8b4cf;
+      --accent: #7c9cff;
+      --accent-2: #8b5cf6;
+      --gold: #f5c451;
+      --green: #4ade80;
+      --danger: #f87171;
+      --shadow: rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: 0.5px;
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 18px 30px var(--shadow);
+    }
+
+    .panel h2 {
+      margin: 0 0 18px;
+      color: #9bd3ff;
+      font-size: 1.55rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 12px;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(124, 156, 255, 0.2);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      flex: 1;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 700;
+      font-size: 0.98rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      color: white;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.96;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+
+    .secondary {
+      background: rgba(71, 85, 105, 0.9);
+    }
+
+    .results {
+      margin-top: 18px;
+      min-height: 110px;
+    }
+
+    .result-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-left: 5px solid var(--accent);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 10px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    }
+
+    .result-card h3 {
+      margin: 0 0 8px;
+      color: #bfe3ff;
+      font-size: 1.1rem;
+    }
+
+    .result-card p {
+      margin: 6px 0;
+      color: var(--muted);
+    }
+
+    .value {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding-top: 18px;
+      font-style: italic;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .stat-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 14px;
+      padding: 18px 14px;
+      text-align: center;
+    }
+
+    .stat-box h4 {
+      margin: 0 0 10px;
+      color: #c8d1ea;
+      font-size: 0.9rem;
+    }
+
+    .stat-box strong {
+      color: #8ccaff;
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Roblox Rap & Account Value Tracker</h1>
+      <p>Track account worth and keep up with Roblox rap trends</p>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <h2>Account Value Search</h2>
+        <label for="username">Roblox Username</label>
+        <input id="username" type="text" placeholder="Enter username..." />
+
+        <div class="actions">
+          <button class="primary" onclick="searchAccount()">Search</button>
+          <button class="secondary" onclick="clearAccount()">Clear</button>
+        </div>
+
+        <div class="results" id="accountResults">
+          <div class="empty">No account searched yet.</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Roblox Rap Search</h2>
+        <label for="rapQuery">Search Rap / Trend</label>
+        <input id="rapQuery" type="text" placeholder="Example: rap, trend, artist..." />
+
+        <div class="actions">
+          <button class="primary" onclick="searchRap()">Search</button>
+          <button class="secondary" onclick="clearRap()">Clear</button>
+        </div>
+
+        <div class="results" id="rapResults">
+          <div class="empty">No rap search yet.</div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel" style="margin-top: 20px;">
+      <h2>Quick Stats</h2>
+      <div class="stats">
+        <div class="stat-box">
+          <h4>Account Searches</h4>
+          <strong id="searchCount">0</strong>
+        </div>
+        <div class="stat-box">
+          <h4>Highest Value</h4>
+          <strong id="highValue">$0</strong>
+        </div>
+        <div class="stat-box">
+          <h4>Accounts Checked</h4>
+          <strong id="accountCount">0</strong>
+        </div>
+        <div class="stat-box">
+          <h4>Rap Searches</h4>
+          <strong id="rapCount">0</strong>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const stats = {
+      searchCount: 0,
+      accountsChecked: 0,
+      highestValue: 0,
+      rapCount: 0
+    };
+
+    const rapData = [
+      { name: 'LIT Killah', genre: 'Roblox Rap', followers: '2.4M', trend: 'Top artist' },
+      { name: 'Apex Flame', genre: 'Trap / Roblox', followers: '1.9M', trend: 'Trending' },
+      { name: 'NoobWave', genre: 'Rap', followers: '980K', trend: 'Viral' },
+      { name: 'Block Dynasty', genre: 'Roblox Rap', followers: '1.3M', trend: 'Hot' },
+      { name: 'Skyline Flow', genre: 'Hip-Hop', followers: '760K', trend: 'Growing' }
+    ];
+
+    function generateAccountValue(username) {
+      let seed = 0;
+      for (let i = 0; i < username.length; i++) {
+        seed += username.charCodeAt(i);
+      }
+      return 1200 + ((seed * 15) % 245000);
+    }
+
+    function searchAccount() {
+      const username = document.getElementById('username').value.trim();
+      if (!username) {
+        alert('Please enter a Roblox username.');
+        return;
+      }
+
+      stats.searchCount += 1;
+      stats.accountsChecked += 1;
+      const value = generateAccountValue(username);
+      stats.highestValue = Math.max(stats.highestValue, value);
+      updateStats();
+
+      document.getElementById('accountResults').innerHTML = `
+        <div class="result-card">
+          <h3>${username}</h3>
+          <p><strong>Estimated Value:</strong> <span class="value">$${value.toLocaleString()}</span></p>
+          <p><strong>Robux Balance:</strong> $${Math.floor(value * 0.42).toLocaleString()}</p>
+          <p><strong>Inventory Value:</strong> $${Math.floor(value * 0.58).toLocaleString()}</p>
+          <p><strong>Account Status:</strong> Active / Likely valuable</p>
+        </div>
+      `;
+    }
+
+    function clearAccount() {
+      document.getElementById('username').value = '';
+      document.getElementById('accountResults').innerHTML = '<div class="empty">No account searched yet.</div>';
+    }
+
+    function searchRap() {
+      const query = document.getElementById('rapQuery').value.trim().toLowerCase();
+      if (!query) {
+        alert('Please enter a rap search term.');
+        return;
+      }
+
+      stats.rapCount += 1;
+      updateStats();
+
+      const matches = rapData.filter(item => {
+        return (
+          item.name.toLowerCase().includes(query) ||
+          item.genre.toLowerCase().includes(query) ||
+          item.trend.toLowerCase().includes(query)
+        );
+      });
+
+      let html = '';
+      if (matches.length > 0) {
+        matches.forEach(item => {
+          html += `
+            <div class="result-card">
+              <h3>${item.name}</h3>
+              <p><strong>Genre:</strong> ${item.genre}</p>
+              <p><strong>Followers:</strong> ${item.followers}</p>
+              <p><strong>Status:</strong> ${item.trend}</p>
+            </div>
+          `;
+        });
+      } else {
+        html = `
+          <div class="result-card">
+            <h3>No direct match</h3>
+            <p>Try searching for terms like <strong>rap</strong>, <strong>roblox</strong>, or <strong>trending</strong>.</p>
+          </div>
+        `;
+      }
+
+      document.getElementById('rapResults').innerHTML = html;
+    }
+
+    function clearRap() {
+      document.getElementById('rapQuery').value = '';
+      document.getElementById('rapResults').innerHTML = '<div class="empty">No rap search yet.</div>';
+    }
+
+    function updateStats() {
+      document.getElementById('searchCount').textContent = stats.searchCount;
+      document.getElementById('accountCount').textContent = stats.accountsChecked;
+      document.getElementById('rapCount').textContent = stats.rapCount;
+      document.getElementById('highValue').textContent = '$' + stats.highestValue.toLocaleString();
+    }
+  </script>
+</body>
+</html>
